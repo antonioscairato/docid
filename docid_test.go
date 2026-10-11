@@ -27,6 +27,8 @@ func TestIdentifyContem(t *testing.T) {
 		{"224/3658792", "Inscrição Estadual (RS)"},
 		{"123.45678-50", "Inscrição Estadual (PR)"},
 		{"ABC-1D23", "Placa Mercosul"},
+		{"01310-100", "CEP"},
+		{"70040010", "CEP"},
 		{"4006381333931", "EAN-13"},
 		{"978-0-306-40615-7", "ISBN-13"},
 		{"0-306-40615-2", "ISBN-10"},
@@ -55,7 +57,7 @@ func TestIdentifyExato(t *testing.T) {
 }
 
 func TestIdentifyVazio(t *testing.T) {
-	for _, in := range []string{"467.061.860-12", "11.222.333/0001-80", "ABC-1234", "", "abc"} {
+	for _, in := range []string{"467.061.860-12", "11.222.333/0001-80", "ABC-1234", "", "abc", "00999-999", "1234567"} {
 		got := Identify(in)
 		if got == nil || len(got) != 0 {
 			t.Errorf("Identify(%q) = %#v, esperava slice vazio não nulo", in, got)

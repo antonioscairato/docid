@@ -60,6 +60,7 @@ docid.Identify("026.503.064-61") // ["PIS/PASEP/NIT", "CNH"]
 | `RENAVAM` | RENAVAM | 11 dígitos (ou 9, formato antigo) |
 | `Chave NF-e` | Chave de acesso da NF-e | 44 dígitos; valida código da UF e DV |
 | `Inscrição Estadual (SP)`, `(PR)`, `(RS)` | Inscrição Estadual | Apenas SP, PR e RS (veja abaixo) |
+| `CEP` | CEP | 8 dígitos, sem dígito verificador; aceita a partir de 01000-000 (veja abaixo) |
 | `Placa Mercosul` | Placa de veículo | Formato `LLLNLNN` (não há dígito verificador) |
 | `credit-card-<bandeira>` | Cartões de crédito/débito | Luhn + faixa e tamanho; veja abaixo |
 | `EAN-13`, `EAN-8`, `UPC-A` | Código de barras | Dígito verificador GS1 |
@@ -75,6 +76,8 @@ O retorno é `credit-card-` seguido da bandeira: `visa`, `mastercard`, `amex`, `
 - As faixas de Elo, Hipercard e Maestro usam uma lista simplificada de prefixos.
 
 ## Limitações
+
+- **CEP:** não existe dígito verificador, então qualquer número de 8 dígitos a partir de `01000-000` é aceito, sem checar se o CEP realmente existe. Por isso um EAN-8 válido também retorna `CEP`.
 
 - **Inscrição Estadual:** cada estado tem sua própria regra. Hoje só SP, PR e RS estão implementados. Para adicionar outro estado, inclua uma função em `ieValidators` e a sigla em `ieOrder` (arquivo `docid.go`).
 - **RG:** não é suportado, pois o formato varia entre os estados e não há algoritmo único. Com a Carteira de Identidade Nacional (CIN), o número passa a ser o CPF, que já é reconhecido.

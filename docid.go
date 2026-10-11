@@ -30,6 +30,7 @@ var validators = []validator{
 	named("UPC-A", func(s string) bool { return len(s) == 12 && validGS1(s) }),
 	named("EAN-8", func(s string) bool { return len(s) == 8 && validGS1(s) }),
 	named("Título de Eleitor", validTituloEleitor),
+	named("CEP", validCEP),
 	named("PIS/PASEP/NIT", validPIS),
 	named("CNH", validCNH),
 	named("RENAVAM", validRENAVAM),
@@ -276,6 +277,16 @@ func validNFe(s string) bool {
 		return false
 	}
 	return int(s[43]-'0') == nfeDV(s[:43])
+}
+
+// ---------------------------------------------------------------- CEP
+// 8 dígitos, sem dígito verificador: só o formato é validado. A faixa de CEPs
+// existentes começa em 01000-000, então valores menores são rejeitados.
+// Atenção: qualquer número de 8 dígitos dentro da faixa é aceito, inclusive
+// os EAN-8 válidos (por isso o retorno pode trazer "CEP" e "EAN-8" juntos).
+
+func validCEP(s string) bool {
+	return len(s) == 8 && isDigits(s) && s >= "01000000"
 }
 
 // ---------------------------------------------------------------- Placa Mercosul (LLLNLNN)
