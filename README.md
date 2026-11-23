@@ -59,7 +59,7 @@ docid.Identify("026.503.064-61") // ["PIS/PASEP/NIT", "CNH"]
 | `PIS/PASEP/NIT` | PIS / PASEP / NIT | 11 dígitos, módulo 11 |
 | `RENAVAM` | RENAVAM | 11 dígitos (ou 9, formato antigo) |
 | `Chave NF-e` | Chave de acesso da NF-e | 44 dígitos; valida código da UF e DV |
-| `Inscrição Estadual (SP)`, `(PR)`, `(RS)` | Inscrição Estadual | Apenas SP, PR e RS (veja abaixo) |
+| `Inscrição Estadual (UF)` | Inscrição Estadual | As 27 UFs (veja abaixo) |
 | `CEP` | CEP | 8 dígitos, sem dígito verificador; aceita a partir de 01000-000 (veja abaixo) |
 | `Placa Mercosul` | Placa de veículo | Formato `LLLNLNN` (não há dígito verificador) |
 | `credit-card-<bandeira>` | Cartões de crédito/débito | Luhn + faixa e tamanho; veja abaixo |
@@ -79,7 +79,7 @@ O retorno é `credit-card-` seguido da bandeira: `visa`, `mastercard`, `amex`, `
 
 - **CEP:** não existe dígito verificador, então qualquer número de 8 dígitos a partir de `01000-000` é aceito, sem checar se o CEP realmente existe. Por isso um EAN-8 válido também retorna `CEP`.
 
-- **Inscrição Estadual:** cada estado tem sua própria regra. Hoje só SP, PR e RS estão implementados. Para adicionar outro estado, inclua uma função em `ieValidators` e a sigla em `ieOrder` (arquivo `docid.go`).
+- **Inscrição Estadual:** todas as 27 UFs estão implementadas e o rótulo traz a sigla, por exemplo `Inscrição Estadual (BA)`. Várias UFs usam exatamente o mesmo algoritmo (módulo 11, pesos 9..2) sem prefixo fixo (SC, CE, PB, PI, ES, SE e AM), então um mesmo número de 9 dígitos pode retornar várias UFs de uma vez. Isso é esperado: o número em si não permite distinguir. Para adicionar ou ajustar uma UF, edite a lista `ieRules` (arquivo `docid.go`).
 - **RG:** não é suportado, pois o formato varia entre os estados e não há algoritmo único. Com a Carteira de Identidade Nacional (CIN), o número passa a ser o CPF, que já é reconhecido.
 - **Validação formal, não existência:** o package confirma que o código é estruturalmente válido, não que ele esteja de fato emitido, ativo ou pertença a alguém.
 - **Dados sensíveis:** CPF, CNH, cartões e outros códigos são dados pessoais. Evite registrá-los em logs.
